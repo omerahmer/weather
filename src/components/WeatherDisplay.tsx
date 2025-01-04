@@ -27,7 +27,7 @@ export default function WeatherDisplay() {
         temperature: number;
         precipitation?: number;
         humidity?: number;
-        windSpeed: number;
+        windSpeed: string; // Adjusted to match the API's format
         windDirection: string;
     }
 
@@ -36,30 +36,70 @@ export default function WeatherDisplay() {
         temperature: period.temperature,
         precipitation: period.precipitation ?? 0,
         humidity: period.humidity ?? 0,
-        windSpeed: period.windSpeed,
+        windSpeed: parseInt(period.windSpeed) || 0, // Extracting numerical value from "X mph"
         windDirection: period.windDirection,
     }));
 
     return (
         <div className="space-y-8 p-8">
             {/* Main Weather Data Points */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {["Temperature", "Precipitation", "Humidity"].map((key, index) => (
-                    <Card key={index} className="text-white" style={{
-                        backgroundColor: "hsl(222.2, 84%, 4.9%)",
-                        borderRadius: "8px",
-                        borderColor: "hsl(217.2, 32.6%, 17.5%)",
-                    }}>
-                        <CardHeader>
-                            <CardTitle>{key}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-2xl font-bold">
-                                {formattedData[0][key.toLowerCase()]}
-                            </p>
-                        </CardContent>
-                    </Card>
-                ))}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Card className="text-white" style={{
+                    backgroundColor: "hsl(222.2, 84%, 4.9%)",
+                    borderRadius: "8px",
+                    borderColor: "hsl(217.2, 32.6%, 17.5%)",
+                }}>
+                    <CardHeader>
+                        <CardTitle>Temperature</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-2xl font-bold">
+                            {formattedData[0].temperature}° Fahrenheit
+                        </p>
+                    </CardContent>
+                </Card>
+                <Card className="text-white" style={{
+                    backgroundColor: "hsl(222.2, 84%, 4.9%)",
+                    borderRadius: "8px",
+                    borderColor: "hsl(217.2, 32.6%, 17.5%)",
+                }}>
+                    <CardHeader>
+                        <CardTitle>Precipitation</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-2xl font-bold">
+                            {formattedData[0].precipitation}%
+                        </p>
+                    </CardContent>
+                </Card>
+                <Card className="text-white" style={{
+                    backgroundColor: "hsl(222.2, 84%, 4.9%)",
+                    borderRadius: "8px",
+                    borderColor: "hsl(217.2, 32.6%, 17.5%)",
+                }}>
+                    <CardHeader>
+                        <CardTitle>Humidity</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-2xl font-bold">
+                            {formattedData[0].humidity}%
+                        </p>
+                    </CardContent>
+                </Card>
+                <Card className="text-white" style={{
+                    backgroundColor: "hsl(222.2, 84%, 4.9%)",
+                    borderRadius: "8px",
+                    borderColor: "hsl(217.2, 32.6%, 17.5%)",
+                }}>
+                    <CardHeader>
+                        <CardTitle>Wind Speed</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-2xl font-bold">
+                            {formattedData[0].windSpeed} mph
+                        </p>
+                    </CardContent>
+                </Card>
             </div>
 
             {/* Weather Charts */}

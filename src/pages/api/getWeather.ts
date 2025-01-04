@@ -28,6 +28,7 @@ export default async function handler(
         }
 
         const forecastData = await forecastResponse.json();
+
         res.status(200).json(forecastData);
     } catch (error: unknown) {
         if (error instanceof Error) {

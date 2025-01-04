@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use client"
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartConfig } from "@/components/ui/chart"
-import { Line, LineChart, XAxis, YAxis } from "recharts"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { Line, LineChart, XAxis, YAxis } from "recharts";
 
 interface WeatherChartProps {
-    data: { name: string; temperature: number; precipitation: number; humidity: number }[];
+    data: { name: string; temperature: number; windSpeed: number; humidity: number }[];
 }
 
 const chartConfig = {
@@ -20,13 +19,15 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
+
 const WeatherChart = ({ data, dataKey, title, color }: {
-    data: any[],
-    dataKey: string,
-    title: string,
-    color: string
+    data: { name: string; temperature: number; windSpeed: number; humidity: number }[];
+    dataKey: string;
+    title: string;
+    color: string;
 }) => (
-    <Card className="overflow-hidden text-white"
+    <Card
+        className="overflow-hidden text-white"
         style={{
             backgroundColor: "hsl(222.2, 84%, 4.9%)",
             borderRadius: "8px",
@@ -53,7 +54,6 @@ const WeatherChart = ({ data, dataKey, title, color }: {
                             fontSize={12}
                             tickLine={false}
                             axisLine={false}
-                            tickFormatter={(value) => `${value}`}
                         />
                         <Line
                             type="monotone"
@@ -68,7 +68,7 @@ const WeatherChart = ({ data, dataKey, title, color }: {
             </div>
         </CardContent>
     </Card>
-)
+);
 
 export default function WeatherCharts({ data }: WeatherChartProps) {
     return (
@@ -92,5 +92,27 @@ export default function WeatherCharts({ data }: WeatherChartProps) {
                 color="hsl(41, 100%, 67%)"
             />
         </div>
-    )
+    );
+}
+
+// Parsing Weather Data
+interface RawWeatherData {
+    properties: {
+        periods: {
+            name: string;
+            temperature: number;
+            windSpeed: string;
+        }[];
+    };
+}
+
+export function parseWeatherData(rawWeatherData: RawWeatherData) {
+    const { periods } = rawWeatherData.properties;
+
+    return periods.map((period: { name: string; temperature: number; windSpeed: string }) => ({
+        name: period.name,
+        temperature: period.temperature || 0,
+        windSpeed: parseInt(period.windSpeed.split(" ")[0]) || 0,
+        humidity: 50, // Placeholder as the actual data lacks humidity
+    }));
 }

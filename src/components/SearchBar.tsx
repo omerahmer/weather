@@ -40,8 +40,12 @@ export default function SearchBar() {
             const weatherResponse = await fetch(`/api/getWeather?lat=${lat}&lng=${lng}`);
             if (!weatherResponse.ok) throw new Error("Failed to fetch weather data");
 
+
             const weatherData = await weatherResponse.json();
             setWeatherData(weatherData);
+
+            const precipitation = weatherData?.properties?.periods?.[0]?.probabilityOfPrecipitation.value;
+            console.log("Precipitation data:", precipitation);
         } catch (error: unknown) {
             if (error instanceof Error) setError(error.message);
             else setError("An unexpected error occurred");

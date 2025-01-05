@@ -26,10 +26,14 @@ export default function WeatherDisplay() {
     interface Period {
         name: string;
         temperature: number;
-        probabilityOfPrecipitation?: [];
+        probabilityOfPrecipitation?: precipitationPoint;
         humidity?: number;
         windSpeed: string; // Adjusted to match the API's format
         windDirection: string;
+    }
+
+    type precipitationPoint = {
+        value: number,
     }
 
     const formattedData = periods.map((period: Period) => ({
